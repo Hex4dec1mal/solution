@@ -1,31 +1,30 @@
-### Application description
+### Solution (Must-have part)
 
-Dockerized Django with Postgres, Gunicorn, and Nginx
+Dock^W Kuberized Django with Postgres, Gunicorn, and Nginx
 
-1. Build the images and run the containers:
+1. Build images "web" and "nginx" (or use already builded images after docker-compose build) the images and push to registry [http://hub.docker.com] as
+
+    vinduzyatnik/k8s-sre-task_nginx
+    vinduzyatnik/k8s-sre-task_web
+
+2. Spin up docker-desktop kubernetes one node cluster.
+
+3. Install "ingress-nginx" and "kube-prometheus-stack" helm charts.
+
+[start conditions pic]
+
+4. Deploy app via inside this repo
 
     ```sh
-    $ docker-compose -f docker-compose.yml up -d --build
+    $ kubectl apply -f .
     ```
 
-    Test it out at [http://localhost:1337]. No mounted folders. To apply changes, the image must be re-built.
+    Test it out at [http://localhost].
 
-The app exposes its own metrics on /metrics path
+[app pic]
 
+6. Metrics available in prometheus.
 
-Your task is to move this project to kubernetes platform and make it production-ready.
+[metrics pic]
 
-## Requirements
-### Must-have requirements
-
-1. All necessary kubernetes yaml manifests should be written
-2. Monitoring through prometheus-operator
-3. The app data should be persistent
-4. Load-balancing and HA
-
-### Nice-to-have requirements
-
-5. Scaling improvements, considerations
-6. Application performance improvements and/or considerations
-7. Helm chart
-8. AWS EKS demo (would be great if you can bootstrap eks with terraform) 
+5. PROFIT!!!!!11
