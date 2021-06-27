@@ -1,4 +1,4 @@
-### Solution (Must-have part)
+# Solution (Must-have part)
 
 Dock^W Kuberized Django with Postgres, Gunicorn, and Nginx
 
@@ -13,7 +13,7 @@ Dock^W Kuberized Django with Postgres, Gunicorn, and Nginx
 
 [start conditions pic]
 
-4. Deploy app via inside this repo
+4. Deploy app inside this repo via
 
     ```sh
     $ kubectl apply -f .
