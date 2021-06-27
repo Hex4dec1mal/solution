@@ -1,0 +1,154 @@
+apiVersion: v1
+data:
+  DATABASE: postgres
+  DEBUG: "0"
+#  DJANGO_ALLOWED_HOSTS: nginx 10.0.0.0/8 localhost 127.0.0.1 [::1] 
+  DJANGO_ALLOWED_HOSTS: '*'
+  SECRET_KEY: xiJX1tuCzX19uAeYMTyMmYZmlLcMR02
+  SQL_DATABASE: hello_django_prod
+  SQL_ENGINE: django.db.backends.postgresql
+  SQL_HOST: db
+  SQL_PASSWORD: hello_django
+  SQL_PORT: "5432"
+  SQL_USER: hello_django
+kind: ConfigMap
+metadata:
+  labels:
+    service: web-env
+  name: env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: web
+  name: web
+spec:
+  ports:
+    - name: "1338"
+      port: 1338
+      targetPort: 8000
+    - name: "8000"
+      port: 8000
+  selector:
+    service: web
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    service: static-volume
+  name: static-volume
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    service: media-volume
+  name: media-volume
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: web
+  name: web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      service: web
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        service: web
+    spec:
+      containers:
+        - name: web
+          image: vinduzyatnik/k8s-sre-task_web
+          args:
+            - gunicorn
+            - hello_django.wsgi:application
+            - --bind
+            - 0.0.0.0:8000
+          env:
+            - name: DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE
+                  name: env
+            - name: DEBUG
+              valueFrom:
+                configMapKeyRef:
+                  key: DEBUG
+                  name: env
+            - name: DJANGO_ALLOWED_HOSTS
+              valueFrom:
+                configMapKeyRef:
+                  key: DJANGO_ALLOWED_HOSTS
+                  name: env
+            - name: SECRET_KEY
+              valueFrom:
+                configMapKeyRef:
+                  key: SECRET_KEY
+                  name: env
+            - name: SQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  key: SQL_DATABASE
+                  name: env
+            - name: SQL_ENGINE
+              valueFrom:
+                configMapKeyRef:
+                  key: SQL_ENGINE
+                  name: env
+            - name: SQL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: SQL_HOST
+                  name: env
+            - name: SQL_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: SQL_PASSWORD
+                  name: env
+            - name: SQL_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: SQL_PORT
+                  name: env
+            - name: SQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: SQL_USER
+                  name: env
+          ports:
+            - containerPort: 8000
+          resources: {}
+          volumeMounts:
+            - mountPath: /home/app/web/staticfiles
+              name: static-volume
+            - mountPath: /home/app/web/mediafiles
+              name: media-volume
+      restartPolicy: Always
+      volumes:
+        - name: static-volume
+          persistentVolumeClaim:
+            claimName: static-volume
+        - name: media-volume
+          persistentVolumeClaim:
+            claimName: media-volume

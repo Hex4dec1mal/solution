@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: nginx
+  name: nginx
+spec:
+  ports:
+    - name: "http"
+      port: 1337
+      targetPort: 80
+  selector:
+     service: nginx
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+     service: nginx
+  name: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+       service: nginx
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+         service: nginx
+    spec:
+      containers:
+        - image: vinduzyatnik/k8s-sre-task_nginx
+          name: nginx
+          ports:
+            - containerPort: 80
+          resources: {}
+          volumeMounts:
+            - mountPath: /home/app/web/staticfiles
+              name: static-volume
+            - mountPath: /home/app/web/mediafiles
+              name: media-volume
+      restartPolicy: Always
+      volumes:
+        - name: static-volume
+          persistentVolumeClaim:
+            claimName: static-volume
+        - name: media-volume
+          persistentVolumeClaim:
+            claimName: media-volume
