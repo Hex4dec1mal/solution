@@ -2,7 +2,7 @@
 
 Dock^W Kuberized Django with Postgres, Gunicorn, and Nginx
 
-1. Build images "web" and "nginx" (or use already builded images after docker-compose build) the images and push to registry [http://hub.docker.com] as
+1. Build images "web" and "nginx" (or use already builded images after docker-compose build) the images and push to registry [hub.docker.com](https://hub.docker.com/u/vinduzyatnik) as
 
     vinduzyatnik/k8s-sre-task_nginx
     vinduzyatnik/k8s-sre-task_web
