@@ -15,8 +15,7 @@ Dock^W Kuberized Django with Postgres, Gunicorn, and Nginx
 3. Install "ingress-nginx" and "kube-prometheus-stack" helm charts.
 
 
-[start conditions pic]
-
+![picture](img/start_conditions.png)
 
 4. Deploy app inside this repo via
 
@@ -26,12 +25,13 @@ Dock^W Kuberized Django with Postgres, Gunicorn, and Nginx
 
     Test it out at [http://localhost].
 
-[app pic]
+![picture](img/app.png)
 
 6. Metrics available in prometheus.
 
 
-[metrics pic]
+![picture](img/prom.png)
 
+![picture](img/metrics.png)
 
 5. PROFIT!!!!!11
