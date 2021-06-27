@@ -17,7 +17,7 @@ Dock^W Kuberized Django with Postgres, Gunicorn, and Nginx
 
 ![picture](img/start_conditions.png)
 
-4. Deploy app inside this repo via
+4. Deploy all inside this repo via
 
     ```sh
     $ kubectl apply -f .
