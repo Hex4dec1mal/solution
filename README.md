@@ -17,7 +17,7 @@ Dock^W Kuberized Django with Postgres, Gunicorn, and Nginx
 
 ![picture](img/start_conditions.png)
 
-4. Deploy all inside this repo via
+4. Deploy all inside this repo via kustomize
 
     ```sh
     $ kubectl apply -k ./
@@ -42,7 +42,9 @@ UPD 4.07.2021
 2. create kustomization file
 3. add helm 
 
-Deploying using helm
+(Nice-to-have part)
+
+Deploying using helm 
 
     ```sh
     $ helm install <name> web-app
