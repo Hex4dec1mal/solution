@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: web
+  name: web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      service: web
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        service: web
+    spec:
+      containers:
+        - name: web
+          image: vinduzyatnik/k8s-sre-task_web
+          args:
+            - gunicorn
+            - hello_django.wsgi:application
+            - --bind
+            - 0.0.0.0:8000
+          env:
+            - name: DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE
+                  name: env
+            - name: DEBUG
+              valueFrom:
+                configMapKeyRef:
+                  key: DEBUG
+                  name: env
+            - name: DJANGO_ALLOWED_HOSTS
+              valueFrom:
+                configMapKeyRef:
+                  key: DJANGO_ALLOWED_HOSTS
+                  name: env
+            - name: SECRET_KEY
+              valueFrom:
+                configMapKeyRef:
+                  key: SECRET_KEY
+                  name: env
+            - name: SQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  key: SQL_DATABASE
+                  name: env
+            - name: SQL_ENGINE
+              valueFrom:
+                configMapKeyRef:
+                  key: SQL_ENGINE
+                  name: env
+            - name: SQL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: SQL_HOST
+                  name: env
+            - name: SQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: POSTGRES_PASSWORD
+                  name: postgres
+            - name: SQL_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: SQL_PORT
+                  name: env
+            - name: SQL_USER
+              valueFrom:
+                secretKeyRef:
+                  key: POSTGRES_USER
+                  name: postgres
+          ports:
+            - containerPort: 8000
+          resources: {}
+          volumeMounts:
+            - mountPath: /home/app/web/staticfiles
+              name: static-volume
+            - mountPath: /home/app/web/mediafiles
+              name: media-volume
+      restartPolicy: Always
+      volumes:
+        - name: static-volume
+          persistentVolumeClaim:
+            claimName: static-volume
+        - name: media-volume
+          persistentVolumeClaim:
+            claimName: media-volume
