@@ -40,3 +40,16 @@ UPD 4.07.2021
 
 1. db user and pass moved to secret
 2. create kustomization file
+3. add helm 
+
+Deploying using helm
+
+    ```sh
+    $ helm install <name> web-app
+    ```
+
+    OR
+
+    ```sh
+    $ helm install web-app --generate-name
+    ```
