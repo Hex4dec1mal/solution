@@ -42,7 +42,7 @@ UPD 4.07.2021
 2. create kustomization file
 3. add helm 
 
-(Nice-to-have part)
+# (Nice-to-have part)
 
 Deploying using helm 
 
