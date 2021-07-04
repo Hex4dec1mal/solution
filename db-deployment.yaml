@@ -1,25 +1,11 @@
 apiVersion: v1
 data:
   POSTGRES_DB: hello_django_prod
-  POSTGRES_PASSWORD: hello_django
-  POSTGRES_USER: hello_django
 kind: ConfigMap
 metadata:
   labels:
     service: db-env-db
   name: env-db
----  
-apiVersion: v1
-kind: Service
-metadata:
-  name: db
-  labels:
-    service: db
-spec:
-  ports:
-    - port: 5432
-  selector:
-    service: db
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -33,6 +19,19 @@ spec:
   resources:
     requests:
       storage: 200Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  labels:
+    service: db
+spec:
+  ports:
+    - name: "postgres"
+      port: 5432
+  selector:
+    service: db
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -61,14 +60,14 @@ spec:
                   name: env-db
             - name: POSTGRES_PASSWORD
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: POSTGRES_PASSWORD
-                  name: env-db
+                  name: postgres
             - name: POSTGRES_USER
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: POSTGRES_USER
-                  name: env-db
+                  name: postgres
           image: postgres:12.0-alpine
           name: db
           ports:

@@ -8,9 +8,7 @@ data:
   SQL_DATABASE: hello_django_prod
   SQL_ENGINE: django.db.backends.postgresql
   SQL_HOST: db
-  SQL_PASSWORD: hello_django
   SQL_PORT: "5432"
-  SQL_USER: hello_django
 kind: ConfigMap
 metadata:
   labels:
@@ -123,9 +121,9 @@ spec:
                   name: env
             - name: SQL_PASSWORD
               valueFrom:
-                configMapKeyRef:
-                  key: SQL_PASSWORD
-                  name: env
+                secretKeyRef:
+                  key: POSTGRES_PASSWORD
+                  name: postgres
             - name: SQL_PORT
               valueFrom:
                 configMapKeyRef:
@@ -133,9 +131,9 @@ spec:
                   name: env
             - name: SQL_USER
               valueFrom:
-                configMapKeyRef:
-                  key: SQL_USER
-                  name: env
+                secretKeyRef:
+                  key: POSTGRES_USER
+                  name: postgres
           ports:
             - containerPort: 8000
           resources: {}
