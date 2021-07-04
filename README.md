@@ -20,7 +20,7 @@ Dock^W Kuberized Django with Postgres, Gunicorn, and Nginx
 4. Deploy all inside this repo via
 
     ```sh
-    $ kubectl apply -f .
+    $ kubectl apply -k ./
     ```
 
     Test it out at [http://localhost].
@@ -35,3 +35,8 @@ Dock^W Kuberized Django with Postgres, Gunicorn, and Nginx
 ![picture](img/metrics.png)
 
 5. PROFIT!!!!!11
+
+UPD 4.07.2021
+
+1. db user and pass moved to secret
+2. create kustomization file
